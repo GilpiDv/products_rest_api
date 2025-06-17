@@ -25,6 +25,7 @@ router.post('/',
 )
 
 router.put('/:id',
+    param('id').isInt().withMessage('Invalid id'),
     body('name')
         .notEmpty().withMessage('Name is required'),
     body('price')
@@ -36,7 +37,11 @@ router.put('/:id',
     updateProduct
 )
 
-router.patch('/:id', updateAvailability)
+router.patch('/:id', 
+    param('id').isInt().withMessage('Invalid id'),
+    handleInputErrors,    
+    updateAvailability
+)
 
 router.delete('/', (req, res) => {
     res.json("Desde delete")
