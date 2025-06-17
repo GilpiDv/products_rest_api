@@ -1,7 +1,7 @@
 import request from "supertest";
 import server from "../../server";
 
-// TESTING - Create a new Product
+// Create a new Product
 describe('POST /api/products', () => {
     test('Display validation errors', async () => {
         // Simulate empty send to the create method
@@ -48,6 +48,27 @@ describe('POST /api/products', () => {
 
         expect(response.status).not.toBe(404)
         expect(response.status).not.toBe(200)
+        expect(response.body).not.toHaveProperty('errors')
+    })
+})
+
+// Query Products
+describe('GET /api/products', () => {
+    test('Check if api/products url exists', async () => {
+        const response = await request(server).get('/api/products');
+        
+        expect(response.status).not.toBe(404)
+    })
+
+    test('GET a JSON response with products', async () => {
+        const response = await request(server).get('/api/products');
+
+        expect(response.status).toBe(200)
+        expect(response.headers['content-type']).toMatch(/json/)
+        expect(response.body).toHaveProperty('data')
+        expect(response.body.data).toHaveLength(1)
+
+        expect(response.status).not.toBe(404)
         expect(response.body).not.toHaveProperty('errors')
     })
 })
